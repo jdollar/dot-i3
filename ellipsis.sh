@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
 
+SCRIPTS_DIR="$HOME/.scripts"
 CONFIG_DIR="$HOME/.config"
 I3_CONFIG_DIR="$CONFIG_DIR/i3"
 I3_BLOCKS_CONFIG_DIR="$CONFIG_DIR/i3blocks"
 
+I3_CONTRIB_REPO="https://github.com/vivien/i3blocks-contrib.git"
+
 pkg.link() {
-  mkdir -p "$I3_CONFIG_DIR"
-  mkdir -p "$I3_BLOCKS_CONFIG_DIR"
+  if [ ! -d "$I3_CONFIG_DIR" ]; then
+    mkdir -p "$I3_CONFIG_DIR"
+  fi
+
+  if [ ! -d "$I3_BLOCKS_CONFIG_DIR" ]; then
+    mkdir -p "$I3_BLOCKS_CONFIG_DIR"
+  fi
 
   case $(os.platform) in
     linux)
@@ -14,6 +22,15 @@ pkg.link() {
       fs.link_file "platforms/linux/i3blocks/config" "$I3_BLOCKS_CONFIG_DIR/config"
       ;;
   esac
+}
+
+pkg.install() {
+  if [ ! -d "$SCRIPTS_DIR" ]; then
+    mkdir -p "$SCRIPTS_DIR"
+  fi
+
+  cd $SCRIPTS_DIR
+  git clone "$I3_CONTRIB_REPO"
 }
 
 pkg.pull() {
